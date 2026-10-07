@@ -7,7 +7,7 @@ with sync_playwright() as p:
  page=browser.new_page(viewport={'width':1440,'height':1000},device_scale_factor=1)
  errors=[]
  page.on('pageerror',lambda e:errors.append(str(e)))
- page.goto(BASE)
+ page.goto(BASE,wait_until="domcontentloaded")
  page.screenshot(path=str(out/'home-desktop.png'),full_page=True)
  page.locator('#search').fill('캐시')
  assert page.locator('.chapter-card:visible').count()==1
@@ -27,7 +27,7 @@ with sync_playwright() as p:
  page.locator('[data-option="1"]').click();assert '다시' in page.locator('.quiz-feedback').inner_text()
  page.locator('[data-option="0"]').click();assert '정답입니다' in page.locator('.quiz-feedback').inner_text()
  page.locator('#mark-read').click();page.reload();assert page.locator('#mark-read').get_attribute('aria-pressed')=='true'
- page.goto(BASE);assert '1 / 10' in page.locator('#progress-label').inner_text()
+ page.goto(BASE,wait_until="domcontentloaded");assert '1 / 10' in page.locator('#progress-label').inner_text()
  page.locator('#clear-progress').click();assert '0 / 10' in page.locator('#progress-label').inner_text()
  page.goto(BASE+'chapters/ooo.html')
  page.locator('#step').click();assert '커밋 0/3' in page.locator('#result').inner_text()
@@ -46,7 +46,7 @@ with sync_playwright() as p:
   page.goto(BASE+path)
   assert page.locator('h1').count()==1
   assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'),f'Overflow: {path}'
- page.goto(BASE);page.screenshot(path=str(out/'home-mobile.png'),full_page=True)
+ page.goto(BASE,wait_until="domcontentloaded");page.screenshot(path=str(out/'home-mobile.png'),full_page=True)
  page.goto(BASE+'chapters/prediction.html#experiment');page.screenshot(path=str(out/'lab-mobile.png'),full_page=True)
  assert not errors,errors
  browser.close()
