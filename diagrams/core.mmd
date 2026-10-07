@@ -1,0 +1,11 @@
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#e8eee8','primaryTextColor':'#173c32','primaryBorderColor':'#74958a','lineColor':'#527b6c','fontFamily':'sans-serif'}}}%%
+flowchart LR
+ B["BPU · Branch prediction"] --> F["Fetch · I-cache"]
+ F --> D["Decode & Rename"]
+ D --> I["Issue queue"]
+ I --> E["Execution units"]
+ I --> L["Load / Store"]
+ L <--> C["D-cache & memory"]
+ E --> R["ROB · In-order commit"]
+ L --> R
+ R -. "Redirect on misprediction" .-> B
